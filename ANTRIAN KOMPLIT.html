@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#b52a24">
+<title>RestoQueue — Panel Antrian</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#b52a24;--green:#246346;--ink:#282a23;--bg:#f5f2e9;--paper:#fffdf8;--line:#dedace;--muted:#717368}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif}h1,h2,h3{font-family:'Barlow Condensed',sans-serif;margin:0}p{line-height:1.7}button,input,select,textarea{font:inherit}button{border:0;border-radius:6px;background:var(--red);color:white;padding:11px 15px;font-weight:700;cursor:pointer;transition:transform .2s}button:hover:not(:disabled){transform:translateY(-2px)}button:active:not(:disabled){transform:scale(.97)}button:disabled{opacity:.5;cursor:wait}input,select,textarea{width:100%;border:1px solid var(--line);background:var(--paper);padding:11px;border-radius:6px;color:var(--ink)}textarea{resize:vertical}label{display:block;font-size:12px;font-weight:700;margin:16px 0 7px}:focus-visible{outline:3px solid #d29b31;outline-offset:3px}.hidden{display:none!important}.secondary{background:#e8e4d9;color:var(--ink)}.green{background:var(--green)}.danger{background:#f8e2dd;color:var(--red)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.muted,small{font-size:12px;color:var(--muted)}.eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.badge{font-size:11px;background:#e9ebdf;padding:6px 9px;border-radius:5px}.app{display:grid;grid-template-columns:205px 1fr;min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;background:#ece9df;border-right:1px solid var(--line);padding:28px 16px;display:flex;flex-direction:column}.brand{font-family:'Barlow Condensed',sans-serif;font-size:29px;font-weight:800;margin-bottom:35px}.brand span{color:var(--red)}.nav{background:none;color:var(--muted);text-align:left;margin-bottom:8px;font-size:12px}.nav.active{background:var(--paper);color:var(--red)}.sidebar-bottom{margin-top:auto;font-size:11px;line-height:1.8;color:var(--muted)}.main{padding:30px clamp(18px,3vw,48px);min-width:0}.top{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--line)}.top h1{font-size:40px}.top .eyebrow{color:var(--red);margin-bottom:7px}.intro{display:flex;justify-content:space-between;align-items:center;gap:18px;margin:26px 0}.intro h2{font-size:33px}.summary{display:flex;gap:22px}.summary strong{font-family:'Barlow Condensed',sans-serif;font-size:30px;display:block}.summary span{font-size:10px;color:var(--muted)}.workspace{display:grid;grid-template-columns:285px 1fr;gap:25px}.panel{background:var(--paper);border:1px solid var(--line);padding:22px;border-radius:8px;align-self:start}.panel h2{font-size:28px}.panel button[type=submit]{margin-top:20px;width:100%}.notice{border-left:3px solid var(--green);background:#e7ecdf;padding:14px;font-size:12px;line-height:1.8;margin:18px 0}.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:15px}.tabs{display:flex;gap:5px;flex-wrap:wrap}.tabs button{font-size:11px;background:transparent;color:var(--muted);padding:9px}.tabs button.active{background:var(--ink);color:white}.search{font-size:12px;flex:1;min-width:140px}.order{background:var(--paper);border:1px solid var(--line);border-left:4px solid #d3a348;padding:18px;border-radius:7px;margin-bottom:12px;animation:reveal .35s}.order.ready{border-left-color:var(--green)}.order.done{border-left-color:#999}.order strong{font-family:'Barlow Condensed',sans-serif;font-size:32px;overflow-wrap:anywhere}.between{justify-content:space-between}.order p{margin:5px 0 12px;overflow-wrap:anywhere}.order button{font-size:11px;padding:9px 12px}.empty{padding:50px 20px;text-align:center;border:1px dashed var(--line);border-radius:8px}.empty h3{font-size:29px}.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}.section{border-top:2px solid var(--ink);padding-top:20px;margin-top:25px;min-width:0}.section h2{font-size:29px}.two{display:grid;grid-template-columns:1fr 1fr;gap:15px}.preview-img{height:130px;width:100%;object-fit:contain;margin-top:12px}.upload{background:#ece9df;border:1px dashed #c5bead;padding:14px;border-radius:6px}.upload input{font-size:11px}.upload button{font-size:11px;margin-top:10px}.blink-preview{background:#19392a;color:white;text-align:center;padding:22px;margin-top:18px;border-radius:8px}.blink-preview strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:65px}.ready-label{font-family:'Barlow Condensed',sans-serif;font-size:30px;color:#edff99;font-weight:800;display:block;line-height:1.15;margin-top:12px}.footer{border-top:1px solid var(--line);margin-top:35px;padding-top:16px;font-size:10px;color:var(--muted)}
+.monitor{min-height:100vh;display:flex;flex-direction:column}.monitor-head{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 3vw;background:var(--red);color:white}.monitor-head h1{font-size:clamp(35px,5vw,68px);text-transform:uppercase}.monitor-head small{color:#fff}.monitor-right{text-align:right;max-width:430px}.clock{font-family:'Barlow Condensed',sans-serif;font-size:38px}.monitor-tools{justify-content:end}.monitor-tools button{font-size:11px;padding:8px}.monitor-voice{font-size:11px;padding:8px;margin-top:10px;max-width:320px}.prayer-strip{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;background:#e9eedf;overflow:hidden;min-height:66px;color:var(--green)}.prayer-label,.prayer-next{padding:12px 22px;background:#e9eedf;z-index:1}.prayer-label strong{font-family:'Barlow Condensed',sans-serif;font-size:24px;display:block}.prayer-next{font-size:11px}.prayer-next strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:25px}.ticker-window{overflow:hidden;min-width:0;flex:1}.ticker-text{white-space:nowrap;width:max-content;animation:marquee 40s linear infinite;font-size:20px;font-weight:600}.prayer-strip.pending .ticker-text{animation:none;font-size:13px;white-space:normal;padding:12px;width:auto}.monitor-body{display:grid;grid-template-columns:1fr 1fr;flex:1}.column{padding:25px 3vw;min-width:0}.column+.column{background:#e6ede1;border-left:1px solid var(--line)}.column h2{font-size:clamp(30px,3.7vw,52px);text-transform:uppercase;margin-bottom:22px}.column+.column h2{color:var(--green)}.display-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.display-order{background:var(--paper);border-bottom:4px solid #d3a348;text-align:center;padding:18px;min-width:0}.display-order strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:clamp(44px,6vw,85px);overflow-wrap:anywhere;line-height:1.15}.display-order p{margin:10px 0;overflow-wrap:anywhere}.ready-order{background:#19392a;border-color:#a6c85d;color:white;padding:24px 15px}.ready-order small{color:#d4e3ce}.ready-order strong{font-size:clamp(58px,7.8vw,112px);color:white;font-weight:800}.ready-order .ready-label{font-size:clamp(25px,3vw,42px)}.media{height:180px;margin-top:23px}.media img{width:100%;height:100%;object-fit:contain}.promo{display:flex;align-items:center;background:var(--ink);color:white;overflow:hidden;min-height:58px}.promo-title{background:var(--red);padding:20px;z-index:1;font-size:12px;font-weight:700;white-space:nowrap}.promo .ticker-text{font-size:18px;font-weight:400}.blink-active .blink-target{animation:visibleBlink 1s steps(1,end) infinite}@keyframes visibleBlink{0%,49.99%{opacity:1}50%,100%{opacity:0}}.announcement{position:fixed;inset:0;background:#19392af7;color:white;z-index:50;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;backdrop-filter:blur(10px);overflow:auto}.announcement-content{width:min(1100px,100%);animation:zoom .4s both}.announcement strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:clamp(85px,19vw,230px);line-height:1.1;overflow-wrap:anywhere}.announcement .ready-label{font-size:clamp(42px,7vw,100px);margin:20px 0}.announcement p{font-size:clamp(19px,3vw,30px);margin:14px 0}.close{position:absolute;right:20px;top:20px;background:#ffffff18;border:1px solid #ffffff40}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;padding:14px 22px;border-radius:6px;z-index:100;font-size:13px;max-width:90vw}
+@keyframes zoom{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}@keyframes marquee{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:1000px){.workspace{grid-template-columns:250px 1fr}.tools{flex-direction:column;align-items:stretch}}
+@media(max-width:800px){.app{display:block}.sidebar{position:static;height:auto;flex-direction:row;align-items:center;flex-wrap:wrap;padding:12px 16px;gap:6px}.brand{margin:0 auto 0 0;font-size:25px}.nav{margin:0;padding:9px}.sidebar-bottom{display:none}.main{padding:22px 16px}.workspace,.settings-grid,.monitor-body,.two{grid-template-columns:1fr}.top h1{font-size:30px}.summary{gap:13px}.column+.column{border-left:0}.monitor-head{padding:18px}.prayer-label,.prayer-next{padding:10px}.prayer-label strong{font-size:18px}.prayer-next strong{font-size:20px}.clock{font-size:28px}.monitor-right{max-width:210px}.intro{align-items:start}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}.order,.announcement-content{animation:none}.blink-active .blink-target{animation:none;opacity:1}.ticker-text{animation:none;white-space:normal;width:auto;padding:12px}}
+</style>
+</head>
+<body>
+<div class="app" id="operator">
+<aside class="sidebar">
+<div class="brand">RestoQueue<span>.</span></div>
+<button class="nav active" data-view="orders">▤ Antrian pesanan</button>
+<button class="nav" data-view="settings">⚙ Pengaturan</button>
+<button class="nav" id="sideMonitor">↗ Buka monitor</button>
+<div class="sidebar-bottom">Penyimpanan lokal aktif<br><br>Satu alur, dari dapur<br>sampai ke pelanggan.</div>
+</aside>
+<main class="main">
+<header class="top"><div><div class="eyebrow">Operasional outlet</div><h1 id="heading"></h1><p class="muted">Pesanan tertata. Pelanggan selalu tahu.</p></div><button id="openMonitor">Buka monitor ↗</button></header>
+<section id="ordersView">
+<div class="intro"><h2>Antrian pesanan</h2><div class="summary"><div><strong id="countPreparing">0</strong><span>Disiapkan</span></div><div><strong id="countReady">0</strong><span>Siap diambil</span></div><div><strong id="countDone">0</strong><span>Selesai</span></div></div></div>
+<div class="workspace">
+<div><form id="orderForm" class="panel"><h2>Pesanan baru</h2><label for="source">Asal pesanan</label><select id="source"><option>GoFood</option><option>ShopeeFood</option><option>GrabFood</option><option>Offline Food</option></select><label for="number">Nomor pesanan</label><input id="number" required maxlength="24" placeholder="GF-1028" autocomplete="off"><label for="customer">Nama pelanggan</label><input id="customer" required maxlength="60" placeholder="Nama pelanggan" autocomplete="off"><button type="submit">+ Tambahkan pesanan</button></form><div class="notice">Pesanan siap langsung tampil besar dan berkedip. Klik <b>Aktifkan audio</b> di tab monitor agar panggilan terdengar.</div></div>
+<div><div class="tools"><div class="tabs"><button class="active" data-filter="active">Aktif</button><button data-filter="preparing">Disiapkan</button><button data-filter="ready">Siap</button><button data-filter="done">Selesai</button></div><input id="search" class="search" placeholder="Cari nomor / nama" aria-label="Cari pesanan"></div><div id="orders"></div></div>
+</div>
+</section>
+<section id="settingsView" class="hidden">
+<div class="intro"><h2>Pengaturan monitor</h2><span class="badge">TERSIMPAN OTOMATIS</span></div>
+<div class="settings-grid">
+<section class="section">
+<h2>01 / Suara panggilan</h2>
+<div class="notice"><b>Semua suara perangkat ditampilkan kembali.</b><br>Pilih suara yang sebelumnya digunakan, termasuk Microsoft David, Zira, Mark, atau suara lain yang tersedia. Pilihan tidak dibatasi hanya tiga suara Microsoft.</div>
+<label for="voiceEnabled">Panggilan suara</label><select id="voiceEnabled" data-setting="voiceEnabled"><option value="on">Aktif</option><option value="off">Nonaktif</option></select>
+<label for="voiceSelect">Pilihan suara pria / wanita</label><select id="voiceSelect"><option value="">Otomatis — suara perangkat</option></select>
+<label for="volume">Volume <span id="volumeLabel"></span></label><input id="volume" type="range" min="0" max="1" step=".1" data-setting="volume">
+<div class="row" style="margin-top:15px"><button id="reloadVoices" class="secondary">↻ Periksa suara</button><button id="testOperatorVoice" class="green">◖)) Tes suara</button></div>
+<p id="operatorVoiceStatus" class="muted" role="status"></p>
+<p class="muted">Kecepatan dan nada normal (1.0). Nomor 1028 dibaca “seribu dua puluh delapan”. Browser tidak memberi informasi gender standar; gunakan tes untuk memilih suara pria atau wanita.</p>
+<details class="notice"><summary>Informasi pelafalan & ketersediaan suara</summary><p>Suara berasal dari browser/perangkat. David, Zira, dan Mark umumnya berbahasa Inggris sehingga dapat memiliki aksen Inggris saat membaca teks Indonesia. Untuk pelafalan Indonesia alami, pilih suara berbahasa id-ID jika tersedia. Website tidak dapat mengubah bahasa asli model suara.</p><p>Jika suara belum muncul, periksa paket Text-to-speech perangkat, buka ulang browser, lalu klik Periksa suara. Pilihan juga dapat diubah langsung di monitor.</p></details>
+</section>
+<section class="section"><h2>02 / Identitas outlet</h2><label for="resto">Nama resto</label><input id="resto" data-setting="resto" maxlength="70"><label for="outlet">Nama outlet</label><input id="outlet" data-setting="outlet" maxlength="80"><label for="area">Area pengambilan</label><input id="area" data-setting="area" maxlength="90"><p class="muted">Monitor dibuka di tab baru pada browser dan perangkat yang sama. Penyimpanan menggunakan browser lokal, bukan server.</p></section>
+<section class="section"><h2>03 / Blink & tampilan besar</h2><label for="blinkEnabled">Kedipan keterangan siap</label><select id="blinkEnabled" data-setting="blinkEnabled"><option value="on">Aktif — tampil / hilang</option><option value="off">Nonaktif</option></select><label for="announcementDuration">Durasi tampilan besar</label><select id="announcementDuration" data-setting="announcementDuration"><option value="8">8 detik</option><option value="12">12 detik</option><option value="20">20 detik</option></select><div id="blinkPreview" class="blink-preview"><strong>1028</strong><span class="ready-label blink-target">SUDAH BERES!<br>SIAP DIAMBIL</span></div><p class="muted">Teks tampil 0,5 detik dan hilang 0,5 detik. Nomor tetap terlihat. Pengurangan animasi perangkat dihormati.</p><button id="demo" class="green">Tes tampilan besar</button></section>
+<section class="section"><h2>04 / Running text promo</h2><label for="promoTitle">Judul kotak promo</label><input id="promoTitle" data-setting="promoTitle" maxlength="35"><label for="promoText">Isi pesan</label><textarea id="promoText" data-setting="promoText" rows="4" maxlength="1000"></textarea><label for="promoSpeed">Kecepatan</label><select id="promoSpeed" data-setting="promoSpeed"><option value="45">Lambat</option><option value="25">Normal</option><option value="12">Cepat</option></select></section>
+<section class="section">
+<h2>05 / Jadwal sholat</h2><p class="muted">Running text di tengah atas monitor berdasarkan koordinat, tanggal, dan zona waktu outlet.</p>
+<button id="gps" class="green">◎ Gunakan GPS outlet</button><p id="gpsStatus" class="muted" role="status"></p>
+<label for="locationName">Nama lokasi</label><input id="locationName" data-setting="locationName">
+<div class="two"><div><label for="latitude">Latitude</label><input id="latitude" type="number" min="-90" max="90" step="any" data-setting="latitude"></div><div><label for="longitude">Longitude</label><input id="longitude" type="number" min="-180" max="180" step="any" data-setting="longitude"></div></div>
+<label for="method">Metode</label><select id="method" data-setting="method"><option value="20">Kementerian Agama RI</option><option value="3">Muslim World League</option><option value="2">ISNA</option><option value="4">Umm Al-Qura</option></select>
+<label for="corrections">Koreksi menit: Subuh, Dzuhur, Ashar, Maghrib, Isya</label><input id="corrections" data-setting="corrections" placeholder="0,0,0,0,0">
+<label for="prayerSpeed">Kecepatan teks sholat</label><select id="prayerSpeed" data-setting="prayerSpeed"><option value="60">Lambat</option><option value="40">Normal</option><option value="25">Cepat</option></select>
+<button id="refreshPrayer" class="secondary" style="margin-top:15px">↻ Perbarui jadwal</button><p id="prayerStatus" class="muted" role="status"></p>
+<div class="notice">Sumber: API AlAdhan. Cocokkan dengan jadwal resmi Kemenag setempat. Ketepatan dipengaruhi koordinat, metode, koreksi dan jam perangkat. GPS memerlukan HTTPS/localhost serta izin lokasi. Jadwal tanggal lama tidak ditampilkan sebagai jadwal hari ini.</div>
+</section>
+<section class="section"><h2>06 / Gambar & GIF</h2><p class="muted">Gambar diperkecil dan dikompres. GIF tetap bergerak, maksimal 2 MB. Visual tampil utuh tanpa terpotong atau melar.</p><label for="preparingImage">Sedang disiapkan</label><div class="upload"><input id="preparingImage" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><img id="preparingPreview" class="preview-img hidden" alt="Pratinjau sedang disiapkan"><button class="secondary" data-remove="preparingImage">Hapus gambar</button></div><label for="readyImage">Siap diambil</label><div class="upload"><input id="readyImage" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><img id="readyPreview" class="preview-img hidden" alt="Pratinjau siap diambil"><button class="secondary" data-remove="readyImage">Hapus gambar</button></div></section>
+</div>
+</section>
+<footer class="footer">RestoQueue — seluruh pesanan dan pengaturan tersimpan pada browser ini.</footer>
+</main>
+</div>
+<section id="monitor" class="monitor hidden" aria-label="Monitor antrian">
+<header class="monitor-head"><div><h1 id="monitorName"></h1><small id="monitorOutlet"></small></div><div class="monitor-right"><div class="clock" id="clock"></div><div class="row monitor-tools"><button id="audio" class="secondary">Aktifkan audio</button><button id="testMonitorVoice" class="secondary">Tes suara</button><button id="fullscreen" class="secondary" aria-label="Layar penuh">⛶</button></div><select id="monitorVoiceSelect" class="monitor-voice" aria-label="Pilihan suara monitor"><option value="">Otomatis — suara perangkat</option></select><br><small id="monitorVoiceStatus" role="status"></small></div></header>
+<div class="prayer-strip pending" id="prayerStrip"><div class="prayer-label"><strong>JADWAL SHOLAT</strong><small id="prayerLocation"></small></div><div class="ticker-window"><div class="ticker-text" id="prayerTrack"></div></div><div class="prayer-next">SHOLAT BERIKUTNYA<strong id="nextPrayer">—</strong><span id="countdown">—</span></div></div>
+<div class="monitor-body"><section class="column"><h2>Sedang disiapkan</h2><div id="displayPreparing" class="display-list"></div><div id="preparingMedia" class="media hidden"><img id="preparingVisual" alt="Informasi sedang disiapkan"></div></section><section class="column"><h2>Siap diambil</h2><div id="displayReady" class="display-list"></div><div id="readyMedia" class="media hidden"><img id="readyVisual" alt="Informasi siap diambil"></div></section></div>
+<footer class="promo"><div class="promo-title" id="displayPromoTitle"></div><div class="ticker-window"><div class="ticker-text" id="displayPromo"></div></div></footer>
+</section>
+<div id="announcement" class="announcement hidden" role="status" aria-live="polite"><button id="closeAnnouncement" class="close">Tutup ✕</button><div class="announcement-content"><div class="eyebrow">PESANAN ANDA</div><strong id="announceNumber"></strong><h2 id="announceTitle" class="ready-label blink-target"></h2><p id="announceCustomer"></p><p id="announceArea"></p></div></div>
+<div id="toast" class="toast hidden" role="status"></div>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id),KEY='restoqueue.prayer.v2',CALL=KEY+'.call',isMonitor=location.hash==='#monitor';
+const defaults={resto:'DAPUR MERAH',outlet:'Outlet Utama',area:'Konter pengambilan',voiceEnabled:'on',volume:.8,blinkEnabled:'on',announcementDuration:12,promoTitle:'PROMO HARI INI',promoText:'Selamat datang! • Silakan ambil pesanan saat nomor Anda tampil di bagian siap diambil.',promoSpeed:25,locationName:'',latitude:'',longitude:'',method:'20',corrections:'0,0,0,0,0',prayerSpeed:40,preparingImage:'',readyImage:''};
+let state={settings:{...defaults},orders:[],prayer:null},filter='active',audioUnlocked=false,queue=[],busy=false,current=null,closeCurrent=null,toastTimer,fetchVersion=0,fetching=false;
+const processed=new Set(),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),5500);}
+function load(){try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&Array.isArray(r.orders)){state={...r,settings:{...defaults,...r.settings}};if(!r.settings?.promoText&&r.settings?.promo)state.settings.promoText=r.settings.promo;if(!r.settings?.voiceEnabled&&r.settings?.voice)state.settings.voiceEnabled=r.settings.voice;}}catch{toast('Data browser tidak dapat dibaca.');}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));render();return true;}catch{toast('Penyimpanan penuh/tidak tersedia. Hapus gambar atau pesanan lama.');return false;}}
+function populate(){document.querySelectorAll('[data-setting]').forEach(e=>e.value=state.settings[e.dataset.setting]);$('volumeLabel').textContent=Math.round(Number(state.settings.volume)*100)+'%';}
+
+/* Cara baca bilangan Indonesia; model suara asli tidak diubah. */
+function spokenNumber(value){
+const a=['','satu','dua','tiga','empat','lima','enam','tujuh','delapan','sembilan','sepuluh','sebelas'];
+function words(n){if(n<12)return a[n];if(n<20)return words(n-10)+' belas';if(n<100)return (words(Math.floor(n/10))+' puluh '+words(n%10)).trim();if(n<200)return ('seratus '+words(n-100)).trim();if(n<1000)return (words(Math.floor(n/100))+' ratus '+words(n%100)).trim();if(n<2000)return ('seribu '+words(n-1000)).trim();if(n<1000000)return (words(Math.floor(n/1000))+' ribu '+words(n%1000)).trim();return (words(Math.floor(n/1000000))+' juta '+words(n%1000000)).trim();}
+const h={A:'a',B:'be',C:'ce',D:'de',E:'e',F:'ef',G:'ge',H:'ha',I:'i',J:'je',K:'ka',L:'el',M:'em',N:'en',O:'o',P:'pe',Q:'ki',R:'er',S:'es',T:'te',U:'u',V:'ve',W:'we',X:'eks',Y:'ye',Z:'zet'},d=['nol','satu','dua','tiga','empat','lima','enam','tujuh','delapan','sembilan'],text=String(value).trim(),groups=text.match(/[A-Za-z]+|\d+/g)||[];
+return groups.length?groups.map(p=>/^\d+$/.test(p)?Number(p)<1000000000?(Number(p)===0?'nol':words(Number(p))):[...p].map(x=>d[Number(x)]).join(' '):[...p.toUpperCase()].map(x=>h[x]||x).join(' ')).join(', '):text;
+}
+function callText(o){const n=spokenNumber(o.number),name=String(o.customer||'').trim(),area=state.settings.area||'konter pengambilan';return o.status==='ready'?`Pesanan nomor ${n}, atas nama ${name}, sudah siap diambil. Silakan menuju ${area}. Terima kasih.`:`Panggilan untuk pesanan nomor ${n}, atas nama ${name}. Silakan menuju ${area}. Terima kasih.`;}
+
+/* Semua suara ditampilkan. Tidak lagi disaring hanya Microsoft atau id-ID. */
+const synth=window.speechSynthesis;
+let voiceCache=[],activeUtterance=null,cancelSpeech=null,voiceBusy=false,voiceOptionsSignature='';
+function selectedVoice(){
+const s=state.settings;
+const uriMatch=voiceCache.find(v=>v.voiceURI===s.selectedVoiceURI);
+if(uriMatch)return uriMatch;
+const nameMatch=voiceCache.find(v=>v.name===s.selectedVoiceName);
+if(nameMatch)return nameMatch;
+if(s.selectedVoiceURI||s.selectedVoiceName)return null;
+/* Pilihan otomatis eksplisit tidak memakai pengaturan Microsoft lama. */
+if(s.voiceAuto!==true){
+const old=voiceCache.find(v=>(s.voiceURI&&v.voiceURI===s.voiceURI)||(s.voiceName&&v.name===s.voiceName));
+if(old)return old;
+if(['David','Zira','Mark'].includes(s.msVoice)){const ms=voiceCache.find(v=>/microsoft/i.test(v.name)&&new RegExp('\\b'+s.msVoice+'\\b','i').test(v.name));if(ms)return ms;}
+}
+return voiceCache.find(v=>/^id(?:[-_]|$)/i.test(v.lang))||voiceCache.find(v=>v.default)||voiceCache[0]||null;
+}
+function refreshVoices(){
+if(synth){const fresh=synth.getVoices();if(fresh.length)voiceCache=fresh;}
+const v=selectedVoice(),s=state.settings;
+const explicit=s.selectedVoiceURI||s.selectedVoiceName;
+const desired=explicit?(s.selectedVoiceURI||v?.voiceURI||''):(s.voiceAuto===true?'':v?.voiceURI||'');
+const sorted=voiceCache.slice().sort((a,b)=>Number(/^id(?:[-_]|$)/i.test(b.lang))-Number(/^id(?:[-_]|$)/i.test(a.lang))||a.name.localeCompare(b.name));
+const signature=JSON.stringify([sorted.map(x=>[x.voiceURI,x.name,x.lang]),desired,s.selectedVoiceName]);
+if(signature!==voiceOptionsSignature){
+for(const id of ['voiceSelect','monitorVoiceSelect']){
+const select=$(id);select.replaceChildren();
+const auto=document.createElement('option');auto.value='';auto.textContent='Otomatis — suara perangkat';select.append(auto);
+for(const voice of sorted){const opt=document.createElement('option');opt.value=voice.voiceURI;opt.textContent=voice.name+' — '+voice.lang;select.append(opt);}
+if(desired&&!voiceCache.some(x=>x.voiceURI===desired)){const opt=document.createElement('option');opt.value=desired;opt.textContent=(s.selectedVoiceName||'Suara terpilih')+' — belum tersedia';select.append(opt);}
+select.value=desired;
+}
+voiceOptionsSignature=signature;
+}
+const text=!synth?'Browser tidak mendukung panggilan suara.':v?'Suara: '+v.name+' · '+v.lang+' · Normal':voiceCache.length?'Suara pilihan belum tersedia. Pilih suara lain atau periksa suara.':'Menunggu daftar suara perangkat…';
+$('operatorVoiceStatus').textContent=text;$('monitorVoiceStatus').textContent=text+(audioUnlocked?' · Audio aktif':'');
+}
+async function waitVoice(){refreshVoices();for(let i=0;!selectedVoice()&&i<20;i++){await new Promise(r=>setTimeout(r,250));refreshVoices();}return selectedVoice();}
+function stopSpeech(){cancelSpeech?.();if(synth)synth.cancel();}
+async function speak(text){
+if(voiceBusy)return;voiceBusy=true;
+try{
+if(!synth)return toast('Browser tidak mendukung panggilan suara.');
+const v=await waitVoice();if(!v)return toast('Suara belum tersedia. Klik Periksa suara dan pilih suara yang tersedia.');
+synth.resume();
+await new Promise(resolve=>{
+const u=new SpeechSynthesisUtterance(text);activeUtterance=u;
+u.voice=v;u.lang=v.lang||'id-ID';u.rate=1;u.pitch=1;u.volume=Number(state.settings.volume??.8);
+let done=false,timer;
+const finish=()=>{if(done)return;done=true;clearTimeout(timer);activeUtterance=null;cancelSpeech=null;resolve();};
+cancelSpeech=finish;
+u.onstart=()=>{$('monitorVoiceStatus').textContent='Memanggil · '+v.name;};
+u.onend=()=>{refreshVoices();finish();};
+u.onerror=e=>{if(!['interrupted','canceled'].includes(e.error))toast('Suara gagal: '+e.error+'. Periksa volume dan aktifkan audio pada monitor.');finish();};
+timer=setTimeout(()=>{toast('Suara tidak merespons. Aktifkan audio lalu tes kembali.');finish();synth.cancel();},35000);
+try{synth.speak(u);}catch(e){toast('Gagal memutar suara: '+e.message);finish();}
+});
+}finally{voiceBusy=false;}
+}
+function changeVoice(e){
+const uri=e.target.value,v=voiceCache.find(x=>x.voiceURI===uri);
+if(uri&&!v)return toast('Suara tersebut belum tersedia pada perangkat ini.');
+load();const old={...state.settings};
+state.settings.selectedVoiceURI=v?.voiceURI||'';
+state.settings.selectedVoiceName=v?.name||'';
+state.settings.voiceURI=v?.voiceURI||'';
+state.settings.voiceName=v?.name||'';
+state.settings.voiceAuto=!uri;
+if(!uri)state.settings.msVoice='';
+if(!save())state.settings=old;else toast(v?'Suara disimpan: '+v.name:'Pilihan suara otomatis disimpan.');
+refreshVoices();
+}
+$('voiceSelect').onchange=changeVoice;$('monitorVoiceSelect').onchange=changeVoice;
+$('audio').onclick=async()=>{if(!synth)return toast('Browser tidak mendukung suara.');synth.resume();audioUnlocked=true;$('audio').textContent='✓ Audio aktif';refreshVoices();if(!busy&&!voiceBusy)await speak('Panggilan suara aktif.');};
+async function testVoice(m=false){if(busy||voiceBusy)return toast('Tunggu panggilan selesai.');if(m&&!audioUnlocked)return toast('Klik Aktifkan audio terlebih dahulu.');await speak(callText({number:'1028',customer:'Budi',status:'ready'}));}
+$('testOperatorVoice').onclick=()=>testVoice();$('testMonitorVoice').onclick=()=>testVoice(true);
+$('reloadVoices').onclick=async()=>{await waitVoice();toast(selectedVoice()?'Suara siap: '+selectedVoice().name:'Suara belum tersedia. Periksa paket suara perangkat dan browser.');};
+if(synth)synth.addEventListener('voiceschanged',refreshVoices);
+
+function blink(){const on=state.settings.blinkEnabled==='on';$('blinkPreview').classList.toggle('blink-active',on);$('displayReady').classList.toggle('blink-active',on);$('announcement').classList.toggle('blink-active',on&&current?.status==='ready');}
+function render(){
+const s=state.settings;$('heading').textContent=s.resto;$('monitorName').textContent=s.resto;$('monitorOutlet').textContent=s.outlet+' · Pengambilan: '+s.area;
+for(const [status,id] of [['preparing','countPreparing'],['ready','countReady'],['done','countDone']])$(id).textContent=state.orders.filter(o=>o.status===status).length;
+const q=$('search').value.toLowerCase(),items=state.orders.filter(o=>(filter==='active'?o.status!=='done':o.status===filter)&&(`${o.number} ${o.customer} ${o.source}`).toLowerCase().includes(q)).slice().reverse();
+$('orders').innerHTML=items.length?items.map(o=>`<article class="order ${o.status}" data-id="${esc(o.id)}"><div class="row between"><strong>#${esc(o.number)}</strong><span class="badge">${{preparing:'Sedang disiapkan',ready:'✓ Siap diambil',done:'✓ Selesai'}[o.status]||''}</span></div><p>${esc(o.customer)} · ${esc(o.source)}</p><div class="row">${o.status!=='done'?`<button class="secondary" data-action="call">◖)) Panggil</button>${o.status==='ready'?'<button class="green" data-action="done">✓ Selesai</button>':'<button class="green" data-action="ready">✓ Siap diambil</button>'}`:''}<button class="danger" data-action="delete">Hapus</button></div></article>`).join(''):'<div class="empty"><h3>Belum ada pesanan</h3><p class="muted">Pesanan pada filter ini akan muncul di sini.</p></div>';
+for(const [status,id] of [['preparing','displayPreparing'],['ready','displayReady']]){
+const list=state.orders.filter(o=>o.status===status),html=list.length?list.map(o=>`<article class="display-order ${status==='ready'?'ready-order':''}"><small>${esc(o.source)}</small><strong>${esc(o.number)}</strong><p>${esc(o.customer)}</p>${status==='ready'?'<span class="ready-label blink-target">✓ SIAP DIAMBIL</span>':''}</article>`).join(''):'<p class="muted">Belum ada pesanan.</p>';if($(id).innerHTML!==html)$(id).innerHTML=html;
+}
+$('displayPromoTitle').textContent=s.promoTitle;if($('displayPromo').textContent!==s.promoText)$('displayPromo').textContent=s.promoText;$('displayPromo').style.animationDuration=s.promoSpeed+'s';
+for(const type of ['preparing','ready']){const src=s[type+'Image'];$(type+'Preview').classList.toggle('hidden',!src);$(type+'Media').classList.toggle('hidden',!src);for(const id of [type+'Preview',type+'Visual']){if(src){if($(id).getAttribute('src')!==src)$(id).src=src;}else $(id).removeAttribute('src');}}
+blink();renderPrayer();if(current&&!current.demo&&!state.orders.some(o=>o.id===current.id&&o.status!=='done')){stopSpeech();closeCurrent?.();}
+}
+function openMonitor(){const u=new URL(location.href);u.hash='monitor';window.open(u.href,'_blank');}
+$('openMonitor').onclick=openMonitor;$('sideMonitor').onclick=openMonitor;
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-view]').forEach(e=>e.classList.toggle('active',e===b));$('ordersView').classList.toggle('hidden',b.dataset.view!=='orders');$('settingsView').classList.toggle('hidden',b.dataset.view!=='settings');});
+document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(e=>e.classList.toggle('active',e===b));render();});$('search').oninput=render;
+$('orderForm').onsubmit=e=>{e.preventDefault();const number=$('number').value.trim(),customer=$('customer').value.trim();if(!number||!customer)return toast('Isi nomor pesanan dan nama pelanggan.');load();if(state.orders.some(o=>String(o.number).toLowerCase()===number.toLowerCase()&&o.status!=='done'))return toast('Nomor pesanan masih aktif.');state.orders.push({id:globalThis.crypto?.randomUUID?.()||Date.now()+'-'+Math.random(),number,customer,source:$('source').value,status:'preparing',created:Date.now()});if(save()){$('number').value='';$('customer').value='';$('number').focus();toast('Pesanan ditambahkan.');}else{load();render();}};
+function emit(o){try{localStorage.setItem(CALL,JSON.stringify({nonce:Date.now()+'-'+Math.random(),time:Date.now(),order:{...o}}));toast('Panggilan dikirim ke monitor.');}catch{toast('Panggilan gagal dikirim.');}}
+$('orders').onclick=e=>{const b=e.target.closest('[data-action]');if(!b)return;load();const o=state.orders.find(x=>x.id===b.closest('[data-id]').dataset.id);if(!o)return render();const a=b.dataset.action;if(a==='call')return emit(o);if(a==='delete'&&!confirm('Hapus pesanan #'+o.number+'?'))return;const old=JSON.stringify(state.orders);if(a==='delete')state.orders=state.orders.filter(x=>x!==o);else{o.status=a;if(a==='ready')o.readyAt=Date.now();if(a==='done')o.completedAt=Date.now();}if(save()){if(a==='ready')emit(o);else toast(a==='done'?'Pesanan selesai.':'Pesanan dihapus.');}else{state.orders=JSON.parse(old);render();}};
+document.querySelectorAll('[data-setting]').forEach(e=>e.onchange=()=>{if(!e.reportValidity())return;const key=e.dataset.setting,val=e.value.trim();if(key==='corrections'&&!/^-?\d+,-?\d+,-?\d+,-?\d+,-?\d+$/.test(val)){toast('Isi lima koreksi menit: 0,0,0,0,0.');populate();return;}load();const old={...state.settings};state.settings[key]=key==='resto'&&!val?defaults.resto:val;if(!save()){state.settings=old;render();}populate();refreshVoices();if(['latitude','longitude','method','corrections'].includes(key))fetchPrayer(true);});
+async function processQueue(){
+if(busy||!queue.length)return;if(voiceBusy){setTimeout(processQueue,300);return;}
+let o=queue.shift();if(!o.demo){const a=state.orders.find(x=>x.id===o.id&&x.status!=='done');if(!a)return processQueue();o={...a};}
+busy=true;current=o;$('announceNumber').textContent=o.number;$('announceCustomer').textContent=o.customer;$('announceTitle').innerHTML=o.status==='ready'?'SUDAH BERES!<br>SIAP DIAMBIL':'PANGGILAN PESANAN';$('announceArea').textContent='Silakan menuju '+state.settings.area;blink();$('announcement').classList.remove('hidden');
+const content=$('announcement').querySelector('.announcement-content');content.style.animation='none';void content.offsetWidth;content.style.animation='';
+let timer;const display=new Promise(resolve=>{closeCurrent=()=>{clearTimeout(timer);$('announcement').classList.add('hidden');resolve();};timer=setTimeout(closeCurrent,Number(state.settings.announcementDuration)*1000);});
+try{if(!audioUnlocked&&state.settings.voiceEnabled==='on'&&isMonitor)toast('Klik Aktifkan audio di monitor agar panggilan terdengar.');await Promise.all([display,audioUnlocked&&state.settings.voiceEnabled==='on'?speak(callText(o)):Promise.resolve()]);}finally{$('announcement').classList.add('hidden');current=null;closeCurrent=null;busy=false;setTimeout(processQueue,400);}
+}
+$('closeAnnouncement').onclick=()=>{stopSpeech();closeCurrent?.();};$('demo').onclick=()=>{queue.push({demo:true,number:'1028',customer:'Budi',status:'ready'});processQueue();};
+$('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{toast('Layar penuh tidak tersedia.');}};
+
+const prayerNames=['Subuh','Dzuhur','Ashar','Maghrib','Isya'],apiNames=['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+function coords(){const s=state.settings;return String(s.latitude).trim()!==''&&String(s.longitude).trim()!==''&&Number.isFinite(Number(s.latitude))&&Number.isFinite(Number(s.longitude))&&Math.abs(Number(s.latitude))<=90&&Math.abs(Number(s.longitude))<=180;}
+function signature(){const s=state.settings;return JSON.stringify([s.latitude,s.longitude,s.method,s.corrections]);}
+function parts(zone){return new Intl.DateTimeFormat('en-GB',{timeZone:zone,day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).reduce((a,p)=>(a[p.type]=p.value,a),{});}
+function dateKey(z){const p=parts(z);return `${p.day}-${p.month}-${p.year}`;}
+function validPrayer(){try{return state.prayer&&state.prayer.signature===signature()&&state.prayer.date===dateKey(state.prayer.zone);}catch{return false;}}
+function renderPrayer(){const s=state.settings,p=state.prayer,v=validPrayer();$('prayerStrip').classList.toggle('pending',!v);$('prayerLocation').textContent=s.locationName||'Lokasi outlet';$('prayerTrack').style.animationDuration=s.prayerSpeed+'s';const text=v?`${s.locationName||'Lokasi outlet'} • ${p.date.replaceAll('-','/')} • ${p.times.map((t,i)=>prayerNames[i]+' '+t).join(' • ')} • ${p.zone} • `:coords()?'Jadwal hari ini belum tersedia. Periksa internet dan perbarui jadwal.':'Atur koordinat outlet pada pengaturan.';if($('prayerTrack').textContent!==text)$('prayerTrack').textContent=text;if(v)$('prayerStatus').textContent=p.times.map((t,i)=>prayerNames[i]+' '+t).join(' · ')+' · '+p.zone;if(!v){$('nextPrayer').textContent='—';$('countdown').textContent='—';}}
+async function fetchPrayer(force=false){
+if(!coords()||(!force&&(fetching||(validPrayer()&&Date.now()-state.prayer.fetched<21600000))))return;const version=++fetchVersion,sig=signature(),s={...state.settings};fetching=true;$('prayerStatus').textContent='Mengambil jadwal…';const c=new AbortController(),timeout=setTimeout(()=>c.abort(),20000);
+try{
+const url=new URL('https://api.aladhan.com/v1/timings');url.searchParams.set('latitude',s.latitude);url.searchParams.set('longitude',s.longitude);url.searchParams.set('method',s.method);url.searchParams.set('school','0');
+const r=await fetch(url,{signal:c.signal});if(!r.ok)throw Error();const j=await r.json();if(j.code!==200||!j.data?.meta?.timezone)throw Error();
+const zone=j.data.meta.timezone,date=dateKey(zone),u=new URL('https://api.aladhan.com/v1/timings/'+date);u.search=url.search;
+const r2=await fetch(u,{signal:c.signal});if(!r2.ok)throw Error();const data=await r2.json();if(data.code!==200)throw Error();
+const correction=s.corrections.split(',').map(Number),times=apiNames.map((name,i)=>{const m=String(data.data.timings[name]).match(/^(\d{2}):(\d{2})/);if(!m)throw Error();const minutes=((Number(m[1])*60+Number(m[2])+correction[i])%1440+1440)%1440;return String(Math.floor(minutes/60)).padStart(2,'0')+':'+String(minutes%60).padStart(2,'0');});
+load();if(version!==fetchVersion||sig!==signature())return;const old=state.prayer;state.prayer={times,zone,date,signature:sig,fetched:Date.now()};if(!save()){state.prayer=old;renderPrayer();}
+}catch{if(version===fetchVersion)$('prayerStatus').textContent=validPrayer()?'Internet bermasalah. Jadwal tersimpan hari ini digunakan.':'Gagal mengambil jadwal. Periksa koordinat dan internet.';}finally{clearTimeout(timeout);if(version===fetchVersion)fetching=false;}
+}
+$('refreshPrayer').onclick=()=>{if(!coords())return toast('Isi koordinat outlet.');fetchPrayer(true);};
+$('gps').onclick=()=>{if(!navigator.geolocation)return toast('GPS tidak tersedia. Isi koordinat manual.');$('gps').disabled=true;$('gpsStatus').textContent='Mencari lokasi… Izinkan GPS browser.';navigator.geolocation.getCurrentPosition(p=>{load();const old={...state.settings};state.settings.latitude=p.coords.latitude.toFixed(6);state.settings.longitude=p.coords.longitude.toFixed(6);if(save()){populate();$('gpsStatus').textContent=`Akurasi ±${Math.round(p.coords.accuracy)} meter. Pastikan berada di outlet.`;fetchPrayer(true);}else state.settings=old;$('gps').disabled=false;},()=>{$('gps').disabled=false;$('gpsStatus').textContent='GPS gagal. Izinkan lokasi, gunakan HTTPS/localhost, atau isi manual.';},{enableHighAccuracy:true,timeout:20000,maximumAge:0});};
+function tick(){let p;try{p=parts(state.prayer?.zone||'Asia/Jakarta');}catch{p=parts('Asia/Jakarta');}$('clock').textContent=`${p.hour}:${p.minute}:${p.second}`;if(!validPrayer()){renderPrayer();return;}const now=Number(p.hour)*3600+Number(p.minute)*60+Number(p.second),next=state.prayer.times.map((t,i)=>({name:prayerNames[i],time:t,seconds:Number(t.slice(0,2))*3600+Number(t.slice(3))*60})).find(t=>t.seconds>now);if(!next){$('nextPrayer').textContent='Subuh besok';$('countdown').textContent='Diperbarui setelah tengah malam';return;}const d=next.seconds-now;$('nextPrayer').textContent=next.name+' '+next.time;$('countdown').textContent=[Math.floor(d/3600),Math.floor(d%3600/60),d%60].map(n=>String(n).padStart(2,'0')).join(':')+' lagi';}
+function readFile(f){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(Error('File gagal dibaca.'));r.readAsDataURL(f);});}
+async function imageData(f){if(!['image/jpeg','image/png','image/webp','image/gif'].includes(f.type))throw Error('Gunakan JPG, PNG, WEBP atau GIF.');if(f.size>(f.type==='image/gif'?2:20)*1024*1024)throw Error(f.type==='image/gif'?'GIF maksimal 2 MB.':'Gambar maksimal 20 MB.');const d=await readFile(f);if(f.type==='image/gif')return d;return new Promise((resolve,reject)=>{const img=new Image();img.onerror=()=>reject(Error('Gambar tidak valid.'));img.onload=()=>{const scale=Math.min(1,1280/img.width,1280/img.height),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);const result=canvas.toDataURL('image/webp',.78);if(result.length>2800000)reject(Error('Hasil gambar terlalu besar.'));else resolve(result);};img.src=d;});}
+for(const key of ['preparingImage','readyImage'])$(key).onchange=async e=>{const f=e.target.files[0];if(!f)return;e.target.disabled=true;try{const src=await imageData(f);load();const old=state.settings[key];state.settings[key]=src;if(save())toast(f.type==='image/gif'?'GIF tersimpan dan tetap bergerak.':'Gambar dikompres dan tersimpan.');else{state.settings[key]=old;render();}}catch(err){toast(err.message);}finally{e.target.disabled=false;e.target.value='';}};
+document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{load();const k=b.dataset.remove,old=state.settings[k];state.settings[k]='';if(save())toast('Gambar dihapus.');else{state.settings[k]=old;render();}});
+window.addEventListener('storage',e=>{if(e.key===KEY){load();populate();render();refreshVoices();}if(e.key===CALL&&isMonitor&&e.newValue){try{const call=JSON.parse(e.newValue);if(!call.nonce||processed.has(call.nonce)||Date.now()-call.time>15000)return;processed.add(call.nonce);if(processed.size>500)processed.delete(processed.values().next().value);load();render();queue.push(call.order);processQueue();}catch{}}});
+load();populate();render();refreshVoices();tick();
+if(isMonitor){$('operator').classList.add('hidden');$('monitor').classList.remove('hidden');document.title='Monitor — '+state.settings.resto;}
+setTimeout(refreshVoices,500);setTimeout(refreshVoices,1500);setTimeout(refreshVoices,3000);
+fetchPrayer();setInterval(tick,1000);setInterval(()=>fetchPrayer(),60000);
+window.addEventListener('online',()=>fetchPrayer(true));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){load();render();refreshVoices();tick();if(synth)synth.resume();fetchPrayer();}});
+})();
+</script>
+</body>
+</html>
